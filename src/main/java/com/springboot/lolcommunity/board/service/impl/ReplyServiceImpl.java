@@ -1,9 +1,6 @@
 package com.springboot.lolcommunity.board.service.impl;
 
-import com.springboot.lolcommunity.board.dto.ReplyDeleteDto;
-import com.springboot.lolcommunity.board.dto.ReplyListDto;
-import com.springboot.lolcommunity.board.dto.ReplyModifyDto;
-import com.springboot.lolcommunity.board.dto.ReplyRequestDto;
+import com.springboot.lolcommunity.board.dto.*;
 import com.springboot.lolcommunity.board.entity.Post;
 import com.springboot.lolcommunity.board.entity.Reply;
 import com.springboot.lolcommunity.board.repository.PostRepository;
@@ -38,7 +35,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public Reply replySave(Long pno, ReplyRequestDto replyRequestDto){
+    public Reply replySave(Long pno, ReplyDto.ReplyRequestDto replyRequestDto){
         LOGGER.info("[replySave] 댓글 작성 시도");
         User user = userRepository.getByEmail(replyRequestDto.getWriter());
         Post post = postRepository.getByPno(pno);
@@ -50,7 +47,7 @@ public class ReplyServiceImpl implements ReplyService {
         replyRepository.save(reply).getRno();
         return reply;
     }
-    public Boolean replyModify(Long rno, ReplyModifyDto replyModifyDto){
+    public Boolean replyModify(Long rno, ReplyDto.ReplyModifyDto replyModifyDto){
         LOGGER.info("[replyModify] 댓글 수정 시도");
         Reply reply = replyRepository.getByRno(rno);
         if(replyModifyDto.getWriter().equals(reply.getWriter().getEmail())){
@@ -64,7 +61,7 @@ public class ReplyServiceImpl implements ReplyService {
             return false;
         }
     }
-    public Boolean replyDelete(Long rno, ReplyDeleteDto replyDeleteDto){
+    public Boolean replyDelete(Long rno, ReplyDto.ReplyDeleteDto replyDeleteDto){
         LOGGER.info("[replyDelete] 댓글 삭제 시도");
         Reply reply = replyRepository.getByRno(rno);
         if(replyDeleteDto.getWriter().equals(reply.getWriter().getEmail())){
@@ -77,12 +74,12 @@ public class ReplyServiceImpl implements ReplyService {
             return false;
         }
     }
-    public List<ReplyListDto> replyList(){
+    public List<ReplyDto.ReplyListDto> replyList(){
         LOGGER.info("[replyList] 댓글 정보 조회");
         List<Reply> replies = replyRepository.findAll();
-        List<ReplyListDto> replyList = new ArrayList<>();
+        List<ReplyDto.ReplyListDto> replyList = new ArrayList<>();
         for(Reply reply : replies){
-            ReplyListDto replyListDto = ReplyListDto.builder()
+            ReplyDto.ReplyListDto replyListDto = ReplyDto.ReplyListDto.builder()
                     .rno(reply.getRno())
                     .writer(reply.getWriter().getNickname())
                     .content(reply.getContent())

@@ -26,22 +26,22 @@ public class ReplyController {
     }
 
     @GetMapping(value = "/")
-    public List<ReplyListDto> replyList() throws Exception{
+    public List<ReplyDto.ReplyListDto> replyList() throws Exception{
         LOGGER.info("[replyList] 게시글 목록 조회");
-        List<ReplyListDto> replyList = replyService.replyList();
+        List<ReplyDto.ReplyListDto> replyList = replyService.replyList();
         LOGGER.info("[replyList] 게시글 목록 조회 완료");
         return replyList;
     }
 
     @PostMapping(value = "/{pno}/write")
-    public Reply replySave(@PathVariable Long pno,@RequestBody ReplyRequestDto replyRequestDto){
+    public Reply replySave(@PathVariable Long pno,@RequestBody ReplyDto.ReplyRequestDto replyRequestDto){
         Reply reply = replyService.replySave(pno, replyRequestDto);
         LOGGER.info("[replySave] 댓글 작성 완료");
         return reply;
     }
 
     @PutMapping(value = "/modify/{rno}")
-    public Boolean replyModify(@PathVariable Long rno, @RequestBody ReplyModifyDto replyModifyDto){
+    public Boolean replyModify(@PathVariable Long rno, @RequestBody ReplyDto.ReplyModifyDto replyModifyDto){
         LOGGER.info("[replyModify] 댓글 수정");
         boolean check = replyService.replyModify(rno, replyModifyDto);
         if(check){
@@ -50,7 +50,7 @@ public class ReplyController {
         return check;
     }
     @DeleteMapping(value = "/delete/{rno}")
-    public Boolean replyDelete(@PathVariable Long rno, @RequestBody ReplyDeleteDto replyDeleteDto){
+    public Boolean replyDelete(@PathVariable Long rno, @RequestBody ReplyDto.ReplyDeleteDto replyDeleteDto){
         LOGGER.info("[replyDelete] 댓글 삭제");
         boolean check = replyService.replyDelete(rno, replyDeleteDto);
         if(check){

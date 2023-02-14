@@ -12,9 +12,6 @@ import com.springboot.lolcommunity.user.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -38,7 +35,7 @@ public class PostServiceImpl implements PostService {
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
 
-    public Post postSave(PostRequestDto postRequestDto){
+    public Post postSave(PostDto.PostRequestDto postRequestDto){
         LOGGER.info("[postSave] 게시글 작성 시도 email : {} ", postRequestDto.getWriter());
         User user = userRepository.getByEmail(postRequestDto.getWriter());
         Board board = boardRepository.getByBno(1L);
@@ -53,7 +50,7 @@ public class PostServiceImpl implements PostService {
         return post;
     }
 
-    public Boolean postModify(Long pno, PostModifyDto postModifyDto){
+    public Boolean postModify(Long pno, PostDto.PostModifyDto postModifyDto){
         LOGGER.info("[postModify] 게시글 수정");
         Post post = postRepository.getByPno(pno);
         if(postModifyDto.getWriter().equals(post.getWriter().getEmail())){
@@ -69,7 +66,7 @@ public class PostServiceImpl implements PostService {
         }
     }
 
-    public Boolean postDelete(Long pno, PostDeleteDto postDeleteDto){
+    public Boolean postDelete(Long pno, PostDto.PostDeleteDto postDeleteDto){
         LOGGER.info("[postDelete] 게시글 삭제");
         Post post = postRepository.getByPno(pno);
         if(postDeleteDto.getWriter().equals(post.getWriter().getEmail())){
@@ -84,10 +81,10 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    public PostResult postGet(Long pno){
+    public PostDto.PostResult postGet(Long pno){
         LOGGER.info("[postGet] 게시글 조회");
         Post post = postRepository.getByPno(pno);
-        PostResult result = PostResult.builder()
+        PostDto.PostResult result = PostDto.PostResult.builder()
                 .title(post.getTitle())
                 .content(post.getContent())
                 .writer(post.getWriter().getNickname())
@@ -96,12 +93,12 @@ public class PostServiceImpl implements PostService {
         return result;
     }
 
-    public List<PostListDto> postList(){
+    public List<PostDto.PostListDto> postList(){
         LOGGER.info("[postList/Controller] 게시글 조회");
         List<Post> posts = postRepository.findAll();
-        List<PostListDto> postList = new ArrayList<>();
+        List<PostDto.PostListDto> postList = new ArrayList<>();
         for(Post post : posts){
-            PostListDto postListDto = PostListDto.builder()
+            PostDto.PostListDto postListDto = PostDto.PostListDto.builder()
                     .pno(post.getPno())
                     .title(post.getTitle())
                     .writer(post.getWriter().getNickname())
@@ -113,5 +110,7 @@ public class PostServiceImpl implements PostService {
         LOGGER.info("[postList/Controller] 게시글 조회 완료");
         return postList;
     }
+
+
 
 }

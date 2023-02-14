@@ -1,6 +1,6 @@
 package com.springboot.lolcommunity.user.service.impl;
 
-import com.springboot.lolcommunity.user.dto.SignInResultDto;
+import com.springboot.lolcommunity.user.dto.UserDto;
 import com.springboot.lolcommunity.user.service.EmailService;
 import com.springboot.lolcommunity.user.service.UserService;
 import com.springboot.lolcommunity.config.security.JwtTokenProvider;
@@ -38,8 +38,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public User signUp(String email, String password, String name) {
-        LOGGER.info("[SignUp/service] 회원가입 정보 전달");
+    public UserDto.SignResultDto signUp(String email, String password, String name) {
         User user;
         user = User.builder()
                     .email(email)
@@ -47,22 +46,22 @@ public class UserServiceImpl implements UserService {
                     .password(passwordEncoder.encode(password))
                     .roles(Collections.singletonList("ROLE_USER")) // 회원가입 시 기본 권한
                     .build();
-        User savedUser = userRepository.save(user);
-        LOGGER.info("[SignUp/service] 회원가입 완료 {}", savedUser.getEmail());
-        return savedUser;
+        userRepository.save(user);
+        UserDto.SignResultDto result = UserDto.SignResultDto.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .password(user.getPassword())
+                .build();
+        return result;
     }
 
     @Override
-    public SignInResultDto signIn(String email, String password) throws RuntimeException {
+    public UserDto.SignResultDto signIn(String email, String password) throws RuntimeException {
         User user = userRepository.getByEmail(email);
-        LOGGER.info("[SignIn/service] 로그인 시도 email : {}", email);
-
-        LOGGER.info("[SignIn/service] 패스워드 비교 수행");
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException();
         }
-        LOGGER.info("[SignIn/service] 패스워드 일치");
-        SignInResultDto result = SignInResultDto.builder()
+        UserDto.SignResultDto result = UserDto.SignResultDto.builder()
                 .email(user.getEmail())
                 .nickname(user.getNickname())
                 .password(user.getPassword())
@@ -99,13 +98,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void updateUser(String email, String nickname, String password){
+    public UserDto.SignResultDto updateUser(String email, String nickname, String password){
         User user = userRepository.getByEmail(email);
         String changePw = passwordEncoder.encode(password);
         user.setPassword(changePw);
         user.setNickname(nickname);
         userRepository.save(user);
         LOGGER.info("[updateUser] 회원정보 수정 완료 ");
+        UserDto.SignResultDto result =  UserDto.SignResultDto.builder()
+                .email(user.getEmail())
+                .nickname(user.getNickname())
+                .password(user.getPassword())
+                .build();
+        return result;
     }
-
 }

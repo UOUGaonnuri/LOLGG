@@ -7,11 +7,6 @@ import com.springboot.lolcommunity.user.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
-import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -29,15 +24,15 @@ public class PostController {
     }
 
     @GetMapping(value = "/")
-    public List<PostListDto> postList() throws Exception{
+    public List<PostDto.PostListDto> postList() throws Exception{
         LOGGER.info("[postList] 게시글 목록 조회");
-        List<PostListDto> postList = postService.postList();
+        List<PostDto.PostListDto> postList = postService.postList();
         LOGGER.info("[postList] 게시글 목록 조회 완료");
         return postList;
     }
 
     @PostMapping(value = "/write")
-    public Post postWrite(@RequestBody PostRequestDto postRequestDto){
+    public Post postWrite(@RequestBody PostDto.PostRequestDto postRequestDto){
         LOGGER.info("[postWrite] 데이터 확인");
         Post post = postService.postSave(postRequestDto);
         LOGGER.info("[postWrite] 게시글 작성 완료");
@@ -45,14 +40,14 @@ public class PostController {
     }
 
     @GetMapping(value = "/{pno}")
-    public PostResult postGet(@PathVariable Long pno){
-        PostResult result = postService.postGet(pno);
+    public PostDto.PostResult postGet(@PathVariable Long pno){
+        PostDto.PostResult result = postService.postGet(pno);
         LOGGER.info("[postGet] 게시글 조회 완료");
         return result;
     }
 
     @PutMapping (value = "/modify/{pno}")
-    public Boolean postModify(@PathVariable Long pno, @RequestBody PostModifyDto postModifyDto){
+    public Boolean postModify(@PathVariable Long pno, @RequestBody PostDto.PostModifyDto postModifyDto){
         LOGGER.info("[postModify] 게시글 수정");
         boolean check = postService.postModify(pno,postModifyDto);
         if(check){
@@ -62,7 +57,7 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/delete/{pno}")
-    public Boolean postDelete(@PathVariable Long pno, @RequestBody PostDeleteDto postDeleteDto){
+    public Boolean postDelete(@PathVariable Long pno, @RequestBody PostDto.PostDeleteDto postDeleteDto){
         LOGGER.info("[postDelete] 게시글 삭제");
         boolean check = postService.postDelete(pno, postDeleteDto);
         if(check){

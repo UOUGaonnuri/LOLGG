@@ -2,19 +2,15 @@ package com.springboot.lolcommunity.user.controller;
 
 import com.springboot.lolcommunity.user.dto.*;
 import com.springboot.lolcommunity.user.entity.User;
-import com.springboot.lolcommunity.user.repository.UserRepository;
-import com.springboot.lolcommunity.user.service.EmailService;
 import com.springboot.lolcommunity.user.service.UserService;
 import java.util.HashMap;
 import java.util.Map;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -30,27 +26,23 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public SignInResultDto signIn(@RequestBody SignInRequestDto user)
+    public ResponseEntity signIn(@RequestBody UserDto.SignInRequestDto user)
             throws RuntimeException {
         LOGGER.info("[signIn/Controller] 로그인을 중. email : {}", user.getEmail());
-        SignInResultDto result = userService.signIn(user.getEmail(), user.getPassword());
+        UserDto.SignResultDto result = userService.signIn(user.getEmail(), user.getPassword());
         LOGGER.info("[signIn/Controller] 로그인되었습니다. email : {}", user.getEmail());
-        return result;
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/register")
     @ResponseStatus(HttpStatus.OK)
-    public User signUp(@RequestBody SignUpRequestDto user) {
-        LOGGER.info("[signUp/Controller] 회원가입을 중. email : {}, password : ****, nickname : {}", user.getEmail(),
-                user.getNickname());
-        User newuser = userService.signUp(user.getEmail(), user.getPassword(), user.getNickname());
-
-        LOGGER.info("[signUp/Controller] 회원가입을 완료했습니다. email : {}", user.getEmail());
-        return newuser;
+    public ResponseEntity signUp(@RequestBody UserDto.SignUpRequestDto user) {
+        userService.signUp(user.getEmail(), user.getPassword(), user.getNickname());
+        return ResponseEntity.ok().build();
     }
 
     @PostMapping(value = "/check/email")
-    public ResponseEntity<Boolean> emailDuplicateCheck(@RequestBody SingleRequestDto.EmailRequestDto email){
+    public ResponseEntity<Boolean> emailDuplicateCheck(@RequestBody UserDto.EmailRequestDto email){
         boolean result = userService.emailDuplicateCheck(email.getEmail());
         LOGGER.info("[emailDuplicateCheck/Controller] 이메일 중복확인 email : {}", email.getEmail());
         if(result){
@@ -65,7 +57,7 @@ public class UserController {
     }
 
     @PostMapping(value = "/check/nickname")
-    public ResponseEntity<Boolean> nicknameDuplicateCheck(@RequestBody SingleRequestDto.NicknameRequestDto nickname){
+    public ResponseEntity<Boolean> nicknameDuplicateCheck(@RequestBody UserDto.NicknameRequestDto nickname){
         boolean result = userService.nicknameDuplicateCheck(nickname.getNickname());
         LOGGER.info("[nicknameDuplicateCheck/Controller] 닉네임 중복확인 nickname : {}", nickname.getNickname());
         if(result){
@@ -80,7 +72,7 @@ public class UserController {
 
 
     @PostMapping("/findpw")
-    public ResponseEntity findPw(@RequestBody SingleRequestDto.EmailRequestDto email) throws Exception {
+    public ResponseEntity findPw(@RequestBody UserDto.EmailRequestDto email) throws Exception {
         boolean result = userService.findPw(email.getEmail());
         LOGGER.info("[findPw/Controller] 비밀번호 찾기 email : {}", email);
         if(result){
@@ -94,7 +86,7 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity userUpdate(@RequestBody UserUpdateDto user){
+    public ResponseEntity userUpdate(@RequestBody UserDto.UserUpdateDto user){
         LOGGER.info("[userUpdate/Controller] 유저 정보 수정 email : {}",user.getEmail());
         userService.updateUser(user.getEmail(),user.getNickname(),user.getPassword());
         LOGGER.info("[userUpdate/Controller] 유저 정보 수정 완료");
