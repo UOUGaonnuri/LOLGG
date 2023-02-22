@@ -41,17 +41,11 @@ public class ReplyController {
     @PutMapping(value = "/modify/{rno}")
     public Boolean replyModify(@PathVariable Long rno, @RequestBody ReplyDto.ReplyModifyDto replyModifyDto){
         boolean check = replyService.replyModify(rno, replyModifyDto);
-        if(check){
-            LOGGER.info("[replyModify] 댓글 수정 완료");
-        }
         return check;
     }
     @DeleteMapping(value = "/delete/{rno}")
     public Boolean replyDelete(@PathVariable Long rno, @RequestBody ReplyDto.ReplyDeleteDto replyDeleteDto){
         boolean check = replyService.replyDelete(rno, replyDeleteDto);
-        if(check){
-            LOGGER.info("[replyDelete] 댓글 삭제 완료");
-        }
         return check;
     }
 }

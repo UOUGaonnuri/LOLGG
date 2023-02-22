@@ -21,8 +21,6 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements UserService {
 
-    private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
-
     public UserRepository userRepository;
     public PasswordEncoder passwordEncoder;
     public EmailService emailService;

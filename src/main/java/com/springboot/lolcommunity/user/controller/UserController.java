@@ -24,9 +24,7 @@ public class UserController {
     @PostMapping(value = "/login")
     public UserDto.SignInResultDto signIn(@RequestBody UserDto.SignInRequestDto user)
             throws RuntimeException {
-        LOGGER.info("[signIn/Controller] 로그인을 중. email : {}", user.getEmail());
         UserDto.SignInResultDto result = userService.signIn(user.getEmail(), user.getPassword());
-        LOGGER.info("[signIn/Controller] 로그인되었습니다. email : {}", user.getEmail());
         return result;
     }
 
@@ -40,7 +38,6 @@ public class UserController {
     @PostMapping(value = "/check/email")
     public ResponseEntity<Boolean> emailDuplicateCheck(@RequestBody UserDto.EmailRequestDto email){
         boolean result = userService.emailDuplicateCheck(email.getEmail());
-        LOGGER.info("[emailDuplicateCheck/Controller] 이메일 중복확인 email : {}", email.getEmail());
         if(result){
             LOGGER.info("[emailDuplicateCheck/Controller] 이메일 중복");
             return ResponseEntity.badRequest().build();
@@ -55,7 +52,6 @@ public class UserController {
     @PostMapping(value = "/check/nickname")
     public ResponseEntity<Boolean> nicknameDuplicateCheck(@RequestBody UserDto.NicknameRequestDto nickname){
         boolean result = userService.nicknameDuplicateCheck(nickname.getNickname());
-        LOGGER.info("[nicknameDuplicateCheck/Controller] 닉네임 중복확인 nickname : {}", nickname.getNickname());
         if(result){
             LOGGER.info("[nicknameDuplicateCheck/Controller] 닉네임 중복");
             return ResponseEntity.badRequest().build();
@@ -70,7 +66,6 @@ public class UserController {
     @PostMapping("/findpw")
     public ResponseEntity findPw(@RequestBody UserDto.EmailRequestDto email) throws Exception {
         boolean result = userService.findPw(email.getEmail());
-        LOGGER.info("[findPw/Controller] 비밀번호 찾기 email : {}", email);
         if(result){
             LOGGER.info("[findPw/Controller] 임시 비밀번호 전송 완료");
             return ResponseEntity.ok().build();
@@ -83,9 +78,7 @@ public class UserController {
 
     @PutMapping("/update")
     public ResponseEntity userUpdate(@RequestBody UserDto.UserUpdateDto user){
-        LOGGER.info("[userUpdate/Controller] 유저 정보 수정 email : {}",user.getEmail());
         userService.updateUser(user.getEmail(),user.getNickname(),user.getPassword());
-        LOGGER.info("[userUpdate/Controller] 유저 정보 수정 완료");
         return ResponseEntity.ok().build();
     }
 

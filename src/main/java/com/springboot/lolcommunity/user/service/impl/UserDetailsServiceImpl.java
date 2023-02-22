@@ -13,14 +13,10 @@ import org.springframework.transaction.annotation.Transactional;
 @Transactional
 @Service
 public class UserDetailsServiceImpl implements UserDetailsService {
-
-    private final Logger LOGGER = LoggerFactory.getLogger(UserDetailsServiceImpl.class);
-
     private final UserRepository userRepository;
 
     @Override
     public UserDetails loadUserByUsername(String email) {
-        LOGGER.info("[loadUserByUsername] 유저 email 조회. email : {}", email);
         return userRepository.getByEmail(email);
     }
 

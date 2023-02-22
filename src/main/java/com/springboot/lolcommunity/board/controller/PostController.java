@@ -26,44 +26,31 @@ public class PostController {
 
     @GetMapping(value = "/")
     public List<PostDto.PostListDto> postList(){
-        LOGGER.info("[postList] 게시글 목록 조회");
         List<PostDto.PostListDto> postList = postService.postList();
-        LOGGER.info("[postList] 게시글 목록 조회 완료");
         return postList;
     }
 
     @PostMapping(value = "/write")
     public ResponseEntity postWrite(@RequestBody PostDto.PostRequestDto postRequestDto){
-        LOGGER.info("[postWrite] 데이터 확인");
         PostDto.PostResult post = postService.postSave(postRequestDto);
-        LOGGER.info("[postWrite] 게시글 작성 완료");
         return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/{pno}")
     public PostDto.PostResult postGet(@PathVariable Long pno){
         PostDto.PostResult result = postService.postGet(pno);
-        LOGGER.info("[postGet] 게시글 조회 완료");
         return result;
     }
 
     @PutMapping (value = "/modify/{pno}")
     public Boolean postModify(@PathVariable Long pno, @RequestBody PostDto.PostModifyDto postModifyDto){
-        LOGGER.info("[postModify] 게시글 수정");
         boolean check = postService.postModify(pno,postModifyDto);
-        if(check){
-            LOGGER.info("[postModify] 게시글 수정 완료");
-        }
         return check;
     }
 
     @DeleteMapping(value = "/delete/{pno}")
     public Boolean postDelete(@PathVariable Long pno, @RequestBody PostDto.PostDeleteDto postDeleteDto){
-        LOGGER.info("[postDelete] 게시글 삭제");
         boolean check = postService.postDelete(pno, postDeleteDto);
-        if(check){
-            LOGGER.info("[postDelete] 게시글 삭제 완료");
-        }
         return check;
     }
 }
