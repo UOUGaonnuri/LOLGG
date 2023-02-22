@@ -5,7 +5,7 @@ import com.springboot.lolcommunity.user.entity.User;
 
 public interface UserService {
     UserDto.SignResultDto signUp(String email, String password, String name);
-    UserDto.SignResultDto signIn(String email, String password) throws RuntimeException;
+    UserDto.SignInResultDto signIn(String email, String password) throws RuntimeException;
     boolean findPw(String email) throws Exception;
     boolean emailDuplicateCheck(String email);
     boolean nicknameDuplicateCheck(String nickname);

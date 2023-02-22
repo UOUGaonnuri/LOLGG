@@ -56,30 +56,27 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto.SignResultDto signIn(String email, String password) throws RuntimeException {
+    public UserDto.SignInResultDto signIn(String email, String password) throws RuntimeException {
         User user = userRepository.getByEmail(email);
         if (!passwordEncoder.matches(password, user.getPassword())) {
             throw new RuntimeException();
         }
-        UserDto.SignResultDto result = UserDto.SignResultDto.builder()
+        UserDto.SignInResultDto result = UserDto.SignInResultDto.builder()
                 .email(user.getEmail())
                 .nickname(user.getNickname())
-                .password(user.getPassword())
+                .token(jwtTokenProvider.createToken(String.valueOf(user.getEmail()),user.getRoles()))
                 .build();
         return result;
     }
 
     @Override
     public boolean findPw(String email) throws Exception{
-        LOGGER.info("[findpw/service] 비밀번호 찾기 시도 email : {} ", email);
         User user =  userRepository.getByEmail(email);
         Optional<User> updateUser = Optional.ofNullable(user);
         if(updateUser.isPresent()){
-            LOGGER.info("[findpw/service] 이메일 확인 완료 ");
             String code = emailService.sendSimpleMessage(email);
             user.setPassword(passwordEncoder.encode(code));
             userRepository.save(user);
-            LOGGER.info("[findpw/service] 임시 비밀번호 전송 완료 ");
             return true;
         }
         else{
@@ -104,7 +101,6 @@ public class UserServiceImpl implements UserService {
         user.setPassword(changePw);
         user.setNickname(nickname);
         userRepository.save(user);
-        LOGGER.info("[updateUser] 회원정보 수정 완료 ");
         UserDto.SignResultDto result =  UserDto.SignResultDto.builder()
                 .email(user.getEmail())
                 .nickname(user.getNickname())

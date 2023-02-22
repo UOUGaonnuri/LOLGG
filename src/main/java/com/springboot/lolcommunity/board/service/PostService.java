@@ -6,7 +6,7 @@ import com.springboot.lolcommunity.board.entity.Post;
 import java.util.List;
 
 public interface PostService {
-    Post postSave(PostDto.PostRequestDto postRequestDto);
+    PostDto.PostResult postSave(PostDto.PostRequestDto postRequestDto);
     PostDto.PostResult postGet(Long pno);
     List<PostDto.PostListDto> postList();
     Boolean postModify(Long pno, PostDto.PostModifyDto postModifyDto);

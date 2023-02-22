@@ -32,16 +32,13 @@ public class JwtTokenProvider {
 
     @PostConstruct
     protected void init() { // 시크릿 키 초기화
-        LOGGER.info("JwtTokenProvider 내 secretKey 초기화 시작");
         System.out.println(secretKey);
         secretKey = Base64.getEncoder().encodeToString(secretKey.getBytes(StandardCharsets.UTF_8));
         System.out.println(secretKey);
-        LOGGER.info("JwtTokenProvider 내 secretKey 초기화 완료");
     }
 
     // Jwt 토큰 생성
     public String createToken(String userid, List<String> roles) {
-        LOGGER.info("[createToken] 토큰 생성 시작");
         Claims claims = Jwts.claims().setSubject(userid);
         claims.put("roles", roles);
 
@@ -52,7 +49,6 @@ public class JwtTokenProvider {
                 .setExpiration(new Date(now.getTime() + tokenValidMillisecond)) // set expire time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
-
         LOGGER.info("[createToken] 토큰 생성 완료");
         return token;
     }
@@ -85,10 +81,8 @@ public class JwtTokenProvider {
 
     //토큰 유효 체크
     public boolean validateToken(String token) {
-        LOGGER.info("[validateToken] 토큰 유효 체크 시작");
         try {
             Jws<Claims> claims = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token);
-            LOGGER.info("[validateToken] 토큰 유효 체크 완료");
             return !claims.getBody().getExpiration().before(new Date());
         } catch (Exception e) {
             LOGGER.info("[validateToken] 토큰 유효 체크 예외 발생");

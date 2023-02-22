@@ -21,6 +21,16 @@ public class UserDto {
         private String password;
         private String nickname;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class SignInResultDto {
+        private String email;
+        private String nickname;
+        private String token;
+    }
     @Data
     @NoArgsConstructor
     @AllArgsConstructor

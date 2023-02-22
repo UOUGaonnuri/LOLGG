@@ -7,6 +7,7 @@ import com.springboot.lolcommunity.user.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class PostController {
     }
 
     @GetMapping(value = "/")
-    public List<PostDto.PostListDto> postList() throws Exception{
+    public List<PostDto.PostListDto> postList(){
         LOGGER.info("[postList] 게시글 목록 조회");
         List<PostDto.PostListDto> postList = postService.postList();
         LOGGER.info("[postList] 게시글 목록 조회 완료");
@@ -32,11 +33,11 @@ public class PostController {
     }
 
     @PostMapping(value = "/write")
-    public Post postWrite(@RequestBody PostDto.PostRequestDto postRequestDto){
+    public ResponseEntity postWrite(@RequestBody PostDto.PostRequestDto postRequestDto){
         LOGGER.info("[postWrite] 데이터 확인");
-        Post post = postService.postSave(postRequestDto);
+        PostDto.PostResult post = postService.postSave(postRequestDto);
         LOGGER.info("[postWrite] 게시글 작성 완료");
-        return post;
+        return ResponseEntity.ok().build();
     }
 
     @GetMapping(value = "/{pno}")

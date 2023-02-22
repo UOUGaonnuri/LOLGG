@@ -12,11 +12,11 @@ import com.springboot.lolcommunity.user.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 @Transactional
@@ -35,7 +35,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public Reply replySave(Long pno, ReplyDto.ReplyRequestDto replyRequestDto){
+    public ReplyDto.ReplyResult replySave(Long pno, ReplyDto.ReplyRequestDto replyRequestDto){
         LOGGER.info("[replySave] 댓글 작성 시도");
         User user = userRepository.getByEmail(replyRequestDto.getWriter());
         Post post = postRepository.getByPno(pno);
@@ -44,8 +44,12 @@ public class ReplyServiceImpl implements ReplyService {
                 .content(replyRequestDto.getContent())
                 .post(post)
                 .build();
-        replyRepository.save(reply).getRno();
-        return reply;
+        replyRepository.save(reply);
+        ReplyDto.ReplyResult result = ReplyDto.ReplyResult.builder()
+                .content(reply.getContent())
+                .writer(reply.getWriter().getNickname())
+                .build();
+        return result;
     }
     public Boolean replyModify(Long rno, ReplyDto.ReplyModifyDto replyModifyDto){
         LOGGER.info("[replyModify] 댓글 수정 시도");
@@ -76,7 +80,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
     public List<ReplyDto.ReplyListDto> replyList(){
         LOGGER.info("[replyList] 댓글 정보 조회");
-        List<Reply> replies = replyRepository.findAll();
+        List<Reply> replies = replyRepository.findAll(Sort.by(Sort.Direction.DESC, "pno"));
         List<ReplyDto.ReplyListDto> replyList = new ArrayList<>();
         for(Reply reply : replies){
             ReplyDto.ReplyListDto replyListDto = ReplyDto.ReplyListDto.builder()
@@ -87,7 +91,6 @@ public class ReplyServiceImpl implements ReplyService {
                     .build();
             replyList.add(replyListDto);
         }
-        Collections.reverse(replyList);
         return replyList;
     }
 }

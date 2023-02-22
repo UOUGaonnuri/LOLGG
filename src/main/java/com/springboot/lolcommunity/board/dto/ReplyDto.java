@@ -9,7 +9,14 @@ import java.time.LocalDateTime;
 
 public class ReplyDto {
     private ReplyDto(){}
-
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class ReplyResult {
+        private String writer;
+        private String content;
+    }
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
