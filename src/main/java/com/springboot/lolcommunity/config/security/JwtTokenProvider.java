@@ -65,13 +65,10 @@ public class JwtTokenProvider {
 
     // 회원 구별 정보 추출
     public String getUsername(String token) {
-        LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출");
         String info = Jwts.parserBuilder().setSigningKey(secretKey).build().parseClaimsJws(token).getBody()
                 .getSubject();
-        LOGGER.info("[getUsername] 토큰 기반 회원 구별 정보 추출 완료, info : {}", info);
         return info;
     }
-
     // 토큰 값 추출
     public String resolveToken(HttpServletRequest request) {
         LOGGER.info("[resolveToken] HTTP 헤더에서 Token 값 추출");

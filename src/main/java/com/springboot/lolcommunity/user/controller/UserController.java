@@ -22,17 +22,17 @@ public class UserController {
     }
 
     @PostMapping(value = "/login")
-    public UserDto.SignInResultDto signIn(@RequestBody UserDto.SignInRequestDto user)
+    public ResponseEntity<UserDto.SignInResultDto> signIn(@RequestBody UserDto.SignInRequestDto user)
             throws RuntimeException {
         UserDto.SignInResultDto result = userService.signIn(user.getEmail(), user.getPassword());
-        return result;
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping(value = "/register")
     @ResponseStatus(HttpStatus.OK)
-    public ResponseEntity signUp(@RequestBody UserDto.SignUpRequestDto user) {
-        userService.signUp(user.getEmail(), user.getPassword(), user.getNickname());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<UserDto.SignResultDto> signUp(@RequestBody UserDto.SignUpRequestDto user) {
+        UserDto.SignResultDto result = userService.signUp(user.getEmail(), user.getPassword(), user.getNickname());
+        return ResponseEntity.ok(result);
     }
 
     @PostMapping(value = "/check/email")
@@ -44,7 +44,7 @@ public class UserController {
         }
         else{
             LOGGER.info("[emailDuplicateCheck/Controller] 이메일 사용가능");
-            return ResponseEntity.ok().build();
+            return ResponseEntity.ok(result);
         }
 
     }
@@ -60,6 +60,14 @@ public class UserController {
             LOGGER.info("[nicknameDuplicateCheck/Controller] 닉네임 사용가능");
             return ResponseEntity.ok().build();
         }
+    }
+    @PostMapping(value = "/check/password")
+    public ResponseEntity<UserDto.PasswordCheckResultDto> passwordCheck(@RequestBody UserDto.PasswordCheckRequestDto passwordCheckRequestDto){
+        UserDto.PasswordCheckResultDto result = userService.passwordCheck(passwordCheckRequestDto.getToken(), passwordCheckRequestDto.getPassword());
+        if(result.getEmail().equals("false")){
+            return ResponseEntity.badRequest().build();
+        }
+        return ResponseEntity.ok(result);
     }
 
 
@@ -86,6 +94,4 @@ public class UserController {
     public void exceptionTest() throws RuntimeException {
         throw new RuntimeException("접근이 금지되었습니다.");
     }
-
-
 }

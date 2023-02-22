@@ -12,6 +12,8 @@ import com.springboot.lolcommunity.user.service.impl.UserServiceImpl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -89,8 +91,8 @@ public class PostServiceImpl implements PostService {
 
     }
 
-    public List<PostDto.PostListDto> postList(){
-        List<Post> posts = postRepository.findAll(Sort.by(Sort.Direction.DESC, "pno"));
+    public List<PostDto.PostListDto> postList(Pageable pageable){
+        Page<Post> posts = postRepository.findAll(pageable);
         List<PostDto.PostListDto> postList = new ArrayList<>();
         for(Post post : posts){
             PostDto.PostListDto postListDto = PostDto.PostListDto.builder()

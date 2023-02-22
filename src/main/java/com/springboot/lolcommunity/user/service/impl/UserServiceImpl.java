@@ -93,6 +93,17 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    public UserDto.PasswordCheckResultDto passwordCheck(String token, String password){
+        String info = jwtTokenProvider.getUsername(token);
+        User user = userRepository.getByEmail(info);
+        if (!passwordEncoder.matches(password, user.getPassword())) {
+            throw new RuntimeException();
+        }
+        UserDto.PasswordCheckResultDto resultDto = new UserDto.PasswordCheckResultDto(user.getEmail(),user.getNickname());
+        return resultDto;
+    }
+
+    @Override
     public UserDto.SignResultDto updateUser(String email, String nickname, String password){
         User user = userRepository.getByEmail(email);
         String changePw = passwordEncoder.encode(password);

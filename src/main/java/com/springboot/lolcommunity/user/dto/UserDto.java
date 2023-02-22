@@ -65,5 +65,21 @@ public class UserDto {
     public static class NicknameRequestDto{
         private String nickname;
     }
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PasswordCheckRequestDto{
+        private String token;
+        private String password;
+    }
 
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PasswordCheckResultDto{
+        private String email;
+        private String nickname;
+    }
 }
