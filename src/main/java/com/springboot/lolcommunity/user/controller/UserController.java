@@ -85,9 +85,9 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity userUpdate(@RequestBody UserDto.UserUpdateDto user){
-        userService.updateUser(user.getEmail(),user.getNickname(),user.getPassword());
-        return ResponseEntity.ok().build();
+    public ResponseEntity<String> userUpdate(@RequestBody UserDto.UserUpdateDto user){
+        String result = userService.updateUser(user.getEmail(),user.getNickname(),user.getPassword());
+        return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/exception")
