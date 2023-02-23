@@ -9,6 +9,6 @@ public interface UserService {
     boolean emailDuplicateCheck(String email);
     boolean nicknameDuplicateCheck(String nickname);
     UserDto.PasswordCheckResultDto passwordCheck(String token, String password);
-    UserDto.SignResultDto updateUser(String email, String nickname, String password);
+    String updateUser(String email, String nickname, String password);
 
 }

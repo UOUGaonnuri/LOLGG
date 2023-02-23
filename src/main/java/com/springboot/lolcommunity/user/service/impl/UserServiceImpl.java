@@ -104,17 +104,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto.SignResultDto updateUser(String email, String nickname, String password){
+    public String updateUser(String email, String nickname, String password){
         User user = userRepository.getByEmail(email);
-        String changePw = passwordEncoder.encode(password);
-        user.setPassword(changePw);
+        if(!password.equals("null") && !password.isBlank()){
+            String changePw = passwordEncoder.encode(password);
+            user.setPassword(changePw);
+        }
         user.setNickname(nickname);
         userRepository.save(user);
-        UserDto.SignResultDto result =  UserDto.SignResultDto.builder()
-                .email(user.getEmail())
-                .nickname(user.getNickname())
-                .password(user.getPassword())
-                .build();
+        String result = jwtTokenProvider.createToken(String.valueOf(user.getEmail()),user.getRoles());
         return result;
     }
 }
