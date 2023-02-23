@@ -3,14 +3,12 @@ package com.springboot.lolcommunity.user.service.impl;
 import com.springboot.lolcommunity.user.dto.UserDto;
 import com.springboot.lolcommunity.user.service.EmailService;
 import com.springboot.lolcommunity.user.service.UserService;
-import com.springboot.lolcommunity.config.security.JwtTokenProvider;
+import com.springboot.lolcommunity.config.security.token.JwtTokenProvider;
 import com.springboot.lolcommunity.user.entity.User;
 import com.springboot.lolcommunity.user.repository.UserRepository;
 import java.util.Collections;
 import java.util.Optional;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;

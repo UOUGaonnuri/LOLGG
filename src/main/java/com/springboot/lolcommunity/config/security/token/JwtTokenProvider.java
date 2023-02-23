@@ -1,4 +1,4 @@
-package com.springboot.lolcommunity.config.security;
+package com.springboot.lolcommunity.config.security.token;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jws;
@@ -29,6 +29,7 @@ public class JwtTokenProvider {
 
     private String secretKey = "secretkeymanymanylong!!secretkeymanymanylong";
     private final long tokenValidMillisecond = 1000L * 60 * 60; // 1시간만 토큰 유효
+    private final long refreshTokenValidTime = 1000L * 60 * 60 * 144; // 1주일
 
     @PostConstruct
     protected void init() { // 시크릿 키 초기화
@@ -47,6 +48,12 @@ public class JwtTokenProvider {
                 .setClaims(claims) // 데이터
                 .setIssuedAt(now) // 토큰 발행 일자
                 .setExpiration(new Date(now.getTime() + tokenValidMillisecond)) // set expire time
+                .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
+                .compact();
+        String refreshToken = Jwts.builder()
+                .setClaims(claims) // 데이터
+                .setIssuedAt(now) // 토큰 발행 일자
+                .setExpiration(new Date(now.getTime() + refreshTokenValidTime)) // set expire time
                 .signWith(SignatureAlgorithm.HS256, secretKey) // 암호화 알고리즘, secret 값 세팅
                 .compact();
         LOGGER.info("[createToken] 토큰 생성 완료");
