@@ -1,14 +1,17 @@
 package com.springboot.lolcommunity.board.controller;
 
 import com.springboot.lolcommunity.board.dto.*;
+import com.springboot.lolcommunity.board.entity.Post;
 import com.springboot.lolcommunity.board.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,8 +25,8 @@ public class PostController {
     }
 
     @GetMapping(value = "/page")
-    public List<PostDto.PostListDto> postList(@PageableDefault(size = 15, sort = "pno",  direction = Sort.Direction.DESC) Pageable pageable){
-        List<PostDto.PostListDto> postList = postService.postList(pageable);
+    public List<PostDto.PostListDto> postList(@RequestParam Integer page){
+        List<PostDto.PostListDto> postList = postService.postList(page);
         return postList;
     }
 
@@ -34,14 +37,14 @@ public class PostController {
     }
 
     @GetMapping(value = "/{pno}")
-    public ResponseEntity<PostDto.PostResult> postGet(@PathVariable Long pno){
-        PostDto.PostResult result = postService.postGet(pno);
+    public ResponseEntity<PostDto.PostGetResult> postGet(@PathVariable Long pno){
+        PostDto.PostGetResult result = postService.postGet(pno);
         return ResponseEntity.ok(result);
     }
 
-    @PutMapping (value = "/modify/{pno}")
-    public ResponseEntity<Boolean> postModify(@PathVariable Long pno, @RequestBody PostDto.PostModifyDto postModifyDto){
-        boolean check = postService.postModify(pno,postModifyDto);
+    @PutMapping (value = "/modify/")
+    public ResponseEntity<Boolean> postModify(@RequestBody PostDto.PostModifyDto postModifyDto){
+        boolean check = postService.postModify(postModifyDto);
         return ResponseEntity.ok(check);
     }
 
@@ -50,4 +53,9 @@ public class PostController {
         boolean check = postService.postDelete(pno, postDeleteDto);
         return ResponseEntity.ok(check);
     }
+//    @PostMapping(value = "/heart")
+//    public ResponseEntity<Boolean> postHeart(@RequestBody PostDto.PostHeartDto postHeartDto) {
+//        Boolean check = postService.postHeart(postHeartDto);
+//        return ResponseEntity.ok(check);
+//    }
 }

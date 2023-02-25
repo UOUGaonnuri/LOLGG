@@ -1,5 +1,6 @@
 package com.springboot.lolcommunity.user.service.impl;
 
+import com.springboot.lolcommunity.config.security.SecurityUtil;
 import com.springboot.lolcommunity.user.dto.UserDto;
 import com.springboot.lolcommunity.user.service.EmailService;
 import com.springboot.lolcommunity.user.service.UserService;
@@ -10,6 +11,7 @@ import java.util.Collections;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -102,7 +104,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public String updateUser(String email, String nickname, String password){
+    public UserDto.UpdateUserResultDto updateUser(String email, String nickname, String password){
         User user = userRepository.getByEmail(email);
         if(!password.equals("null") && !password.isBlank()){
             String changePw = passwordEncoder.encode(password);
@@ -110,7 +112,18 @@ public class UserServiceImpl implements UserService {
         }
         user.setNickname(nickname);
         userRepository.save(user);
-        String result = jwtTokenProvider.createToken(String.valueOf(user.getEmail()),user.getRoles());
+        String token = jwtTokenProvider.createToken(String.valueOf(user.getEmail()),user.getRoles());
+        UserDto.UpdateUserResultDto result = UserDto.UpdateUserResultDto.builder()
+                .nickname(user.getNickname())
+                .token(token)
+                .build();
         return result;
+    }
+
+    @Override
+    public User getUser(){
+        return userRepository
+                .findById(SecurityUtil.getCurrentUsername())
+                .orElseThrow(() -> new RuntimeException("로그인 정보가 없습니다."));
     }
 }

@@ -26,7 +26,7 @@ public class PostDto {
     @AllArgsConstructor
     @Builder
     public static class PostModifyDto {
-        private String writer;
+        private Long pno;
         private String title;
         private String content;
     }
@@ -36,7 +36,7 @@ public class PostDto {
     @AllArgsConstructor
     @Builder
     public static class PostRequestDto {
-        private String writer;
+        private String token;
         private String title;
         private String content;
     }
@@ -49,6 +49,17 @@ public class PostDto {
         private String writer;
         private String title;
         private String content;
+
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PostGetResult {
+        private String writer;
+        private String title;
+        private String content;
     }
 
     @Data
@@ -57,5 +68,22 @@ public class PostDto {
     @Builder
     public static class PostDeleteDto {
         private String writer;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PostHeartDto {
+        private String email;
+        private Long pno;
+    }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PostPageDto {
+        private Integer page;
     }
 }

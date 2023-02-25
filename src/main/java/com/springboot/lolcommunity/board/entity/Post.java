@@ -2,6 +2,7 @@ package com.springboot.lolcommunity.board.entity;
 
 import com.springboot.lolcommunity.user.entity.User;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;

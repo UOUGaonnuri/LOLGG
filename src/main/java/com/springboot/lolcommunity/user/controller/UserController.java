@@ -1,13 +1,20 @@
 package com.springboot.lolcommunity.user.controller;
 
+import com.springboot.lolcommunity.config.security.SecurityUtil;
 import com.springboot.lolcommunity.user.dto.*;
+import com.springboot.lolcommunity.user.entity.User;
 import com.springboot.lolcommunity.user.service.UserService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/users")
@@ -85,13 +92,18 @@ public class UserController {
     }
 
     @PutMapping("/update")
-    public ResponseEntity<String> userUpdate(@RequestBody UserDto.UserUpdateDto user){
-        String result = userService.updateUser(user.getEmail(),user.getNickname(),user.getPassword());
+    public ResponseEntity<UserDto.UpdateUserResultDto> userUpdate(@RequestBody UserDto.UserUpdateDto user){
+        UserDto.UpdateUserResultDto result = userService.updateUser(user.getEmail(),user.getNickname(),user.getPassword());
         return ResponseEntity.ok(result);
     }
 
     @GetMapping(value = "/exception")
     public void exceptionTest() throws RuntimeException {
         throw new RuntimeException("접근이 금지되었습니다.");
+    }
+    @GetMapping(value = "/emailget")
+    public String currentUserName() {
+        User user = userService.getUser();
+        return user.getNickname();
     }
 }

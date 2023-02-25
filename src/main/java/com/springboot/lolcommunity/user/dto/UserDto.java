@@ -82,4 +82,13 @@ public class UserDto {
         private String email;
         private String nickname;
     }
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class UpdateUserResultDto{
+        private String token;
+        private String nickname;
+    }
 }

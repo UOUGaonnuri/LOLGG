@@ -59,7 +59,6 @@ public class User implements UserDetails {
                 .collect(Collectors.toList());
     }
 
-    @JsonProperty(access = Access.WRITE_ONLY)
     @Override
     public String getUsername() {
         return this.email;
