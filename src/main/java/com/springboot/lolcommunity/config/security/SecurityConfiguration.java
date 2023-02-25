@@ -1,9 +1,7 @@
-package com.springboot.lolcommunity.config;
+package com.springboot.lolcommunity.config.security;
 
-import com.springboot.lolcommunity.config.security.CustomAccessDeniedHandler;
-import com.springboot.lolcommunity.config.security.CustomAuthenticationEntryPoint;
-import com.springboot.lolcommunity.config.security.JwtAuthenticationFilter;
-import com.springboot.lolcommunity.config.security.JwtTokenProvider;
+import com.springboot.lolcommunity.config.security.token.JwtAuthenticationFilter;
+import com.springboot.lolcommunity.config.security.token.JwtTokenProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -35,12 +33,12 @@ public class SecurityConfiguration{
 
                 .and()
                 .authorizeRequests()
-                .antMatchers("/**").permitAll() // 일단 권한은 지정  X
-
+                .antMatchers("/users/**").permitAll() // 일단 권한은 지정  X
+                .antMatchers("/board/**").permitAll() // 일단 권한은 지정  X
+                .antMatchers("/reply/**").permitAll() // 일단 권한은 지정  X
+                .antMatchers("/admin/**").hasRole("ADMIN")
                 .antMatchers("**exception**").permitAll()
-
                 .anyRequest().hasRole("ADMIN")
-
                 .and()
                 .exceptionHandling() // 권한이 없는 사용자 처리
                     .accessDeniedHandler(new CustomAccessDeniedHandler())
