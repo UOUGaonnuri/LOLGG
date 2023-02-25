@@ -86,10 +86,10 @@ public class PostServiceImpl implements PostService {
         return true;
     }
 
-    public Boolean postDelete(Long pno, PostDto.PostDeleteDto postDeleteDto){
-        Post post = postRepository.getByPno(pno);
-        if(postDeleteDto.getWriter().equals(post.getWriter().getEmail())){
-            postRepository.deleteByPno(pno);
+    public Boolean postDelete(PostDto.PostDeleteDto postDeleteDto){
+        Post post = postRepository.getByPno(postDeleteDto.getPno());
+        if(postDeleteDto.getWriter().equals(post.getWriter().getNickname())){
+            postRepository.deleteByPno(postDeleteDto.getPno());
             return true;
         }
         else{

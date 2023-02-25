@@ -12,6 +12,6 @@ public interface PostService {
     PostDto.PostGetResult postGet(Long pno);
     List<PostDto.PostListDto> postList(Integer page);
     Boolean postModify(PostDto.PostModifyDto postModifyDto);
-    Boolean postDelete(Long pno, PostDto.PostDeleteDto postDeleteDto);
+    Boolean postDelete(PostDto.PostDeleteDto postDeleteDto);
 //    Boolean postHeart(PostDto.PostHeartDto postLikeDto);
 }

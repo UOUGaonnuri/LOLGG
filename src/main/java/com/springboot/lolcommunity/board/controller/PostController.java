@@ -49,9 +49,14 @@ public class PostController {
     }
 
     @DeleteMapping(value = "/delete/{pno}")
-    public ResponseEntity<Boolean> postDelete(@PathVariable Long pno, @RequestBody PostDto.PostDeleteDto postDeleteDto){
-        boolean check = postService.postDelete(pno, postDeleteDto);
-        return ResponseEntity.ok(check);
+    public ResponseEntity<Boolean> postDelete(@RequestBody PostDto.PostDeleteDto postDeleteDto){
+        boolean check = postService.postDelete(postDeleteDto);
+        if(check){
+            return ResponseEntity.ok(check);
+        }
+        else{
+            return ResponseEntity.badRequest().build();
+        }
     }
 //    @PostMapping(value = "/heart")
 //    public ResponseEntity<Boolean> postHeart(@RequestBody PostDto.PostHeartDto postHeartDto) {

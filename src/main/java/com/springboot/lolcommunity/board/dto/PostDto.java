@@ -67,6 +67,7 @@ public class PostDto {
     @AllArgsConstructor
     @Builder
     public static class PostDeleteDto {
+        private Long pno;
         private String writer;
     }
 
