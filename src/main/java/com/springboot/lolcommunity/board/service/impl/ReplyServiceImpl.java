@@ -73,8 +73,9 @@ public class ReplyServiceImpl implements ReplyService {
             return false;
         }
     }
-    public List<ReplyDto.ReplyListDto> replyList(){
-        List<Reply> replies = replyRepository.findAll(Sort.by(Sort.Direction.DESC, "pno"));
+    public List<ReplyDto.ReplyListDto> replyList(Long pno){
+        Post post = postRepository.getByPno(pno);
+        List<Reply> replies = replyRepository.findAllByPostOrderByRnoDesc(post);
         List<ReplyDto.ReplyListDto> replyList = new ArrayList<>();
         for(Reply reply : replies){
             ReplyDto.ReplyListDto replyListDto = ReplyDto.ReplyListDto.builder()

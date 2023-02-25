@@ -25,13 +25,13 @@ public class ReplyController {
         this.replyService = replyService;
     }
 
-    @GetMapping(value = "/")
-    public List<ReplyDto.ReplyListDto> replyList() throws Exception{
-        List<ReplyDto.ReplyListDto> replyList = replyService.replyList();
+    @GetMapping(value = "/{pno}")
+    public List<ReplyDto.ReplyListDto> replyList(@PathVariable Long pno) throws Exception{
+        List<ReplyDto.ReplyListDto> replyList = replyService.replyList(pno);
         return replyList;
     }
 
-    @PostMapping(value = "/{pno}/write")
+    @PostMapping(value = "/write/{pno}")
     public ResponseEntity<ReplyDto.ReplyResult> replySave(@PathVariable Long pno, @RequestBody ReplyDto.ReplyRequestDto replyRequestDto){
         ReplyDto.ReplyResult result = replyService.replySave(pno, replyRequestDto);
         return ResponseEntity.ok(result);

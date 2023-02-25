@@ -9,5 +9,5 @@ public interface ReplyService {
     ReplyDto.ReplyResult replySave(Long pno, ReplyDto.ReplyRequestDto replyRequestDto);
     Boolean replyModify(Long bno, ReplyDto.ReplyModifyDto replyModifyDto);
     Boolean replyDelete(Long rno, ReplyDto.ReplyDeleteDto replyDeleteDto);
-    List<ReplyDto.ReplyListDto> replyList();
+    List<ReplyDto.ReplyListDto> replyList(Long pno);
 }
