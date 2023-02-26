@@ -44,6 +44,7 @@ public class ReplyDto {
     public static class ReplyRequestDto {
         private String writer;
         private String content;
+        private Long pno;
     }
 
     @Data

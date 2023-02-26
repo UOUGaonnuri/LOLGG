@@ -35,9 +35,9 @@ public class ReplyServiceImpl implements ReplyService {
     }
     private final Logger LOGGER = LoggerFactory.getLogger(UserServiceImpl.class);
 
-    public ReplyDto.ReplyResult replySave(Long pno, ReplyDto.ReplyRequestDto replyRequestDto){
-        User user = userRepository.getByEmail(replyRequestDto.getWriter());
-        Post post = postRepository.getByPno(pno);
+    public ReplyDto.ReplyResult replySave(ReplyDto.ReplyRequestDto replyRequestDto){
+        User user = userRepository.getByNickname(replyRequestDto.getWriter());
+        Post post = postRepository.getByPno(replyRequestDto.getPno());
         Reply reply = Reply.builder()
                 .writer(user)
                 .content(replyRequestDto.getContent())
@@ -52,7 +52,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
     public Boolean replyModify(Long rno, ReplyDto.ReplyModifyDto replyModifyDto){
         Reply reply = replyRepository.getByRno(rno);
-        if(replyModifyDto.getWriter().equals(reply.getWriter().getEmail())){
+        if(replyModifyDto.getWriter().equals(reply.getWriter().getNickname())){
             reply.setContent(replyModifyDto.getContent());
             replyRepository.save(reply);
             return true;
@@ -64,7 +64,7 @@ public class ReplyServiceImpl implements ReplyService {
     }
     public Boolean replyDelete(Long rno, ReplyDto.ReplyDeleteDto replyDeleteDto){
         Reply reply = replyRepository.getByRno(rno);
-        if(replyDeleteDto.getWriter().equals(reply.getWriter().getEmail())){
+        if(replyDeleteDto.getWriter().equals(reply.getWriter().getNickname())){
             replyRepository.deleteByRno(rno);
             return true;
         }

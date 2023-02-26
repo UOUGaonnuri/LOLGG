@@ -74,6 +74,7 @@ public class PostServiceImpl implements PostService {
                 .title(post.getTitle())
                 .content(post.getContent())
                 .writer(post.getWriter().getNickname())
+                .pno(pno)
                 .build();
         return result;
     }

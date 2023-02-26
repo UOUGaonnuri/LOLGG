@@ -32,8 +32,8 @@ public class ReplyController {
     }
 
     @PostMapping(value = "/write/{pno}")
-    public ResponseEntity<ReplyDto.ReplyResult> replySave(@PathVariable Long pno, @RequestBody ReplyDto.ReplyRequestDto replyRequestDto){
-        ReplyDto.ReplyResult result = replyService.replySave(pno, replyRequestDto);
+    public ResponseEntity<ReplyDto.ReplyResult> replySave(@RequestBody ReplyDto.ReplyRequestDto replyRequestDto){
+        ReplyDto.ReplyResult result = replyService.replySave(replyRequestDto);
         return ResponseEntity.ok(result);
     }
 

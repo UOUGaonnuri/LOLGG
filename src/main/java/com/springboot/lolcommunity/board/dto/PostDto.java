@@ -60,6 +60,7 @@ public class PostDto {
         private String writer;
         private String title;
         private String content;
+        private Long pno;
     }
 
     @Data
