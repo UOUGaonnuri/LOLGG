@@ -17,6 +17,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -115,6 +116,38 @@ public class PostServiceImpl implements PostService {
             postList.add(postListDto);
         }
         return postList;
+    }
+
+    public PostDto.PostListResultDto postList2(Integer page){
+        Sort sort = Sort.by("pno").descending();
+        PageRequest pageRequest = PageRequest.of(page, 10, sort);
+        Page<Post> result = postRepository.findAll(pageRequest);
+        List<PostDto.PostListDto> postList = new ArrayList<>();
+        for(Post post : result) {
+            PostDto.PostListDto postListDto = PostDto.PostListDto.builder()
+                    .pno(post.getPno())
+                    .title(post.getTitle())
+                    .writer(post.getWriter().getNickname())
+                    .regDate(post.getRegDate())
+                    .build();
+            postList.add(postListDto);
+        }
+        int start = (int) pageRequest.getOffset();
+        Integer end = Math.min((start + pageRequest.getPageSize()), postList.size());
+        if(end != 10){
+            end = 0;
+        }
+        PostDto.PostListResultDto postListResultDto = PostDto.PostListResultDto.builder()
+                .postList(postList)
+                .end(end)
+                .build();
+        return postListResultDto;
+    }
+    public Page<Post> postSearch(String keyword, Integer page) {
+        Sort sort = Sort.by("pno").descending();
+        Pageable pageRequest = PageRequest.of(page, 10, sort);
+        Page<Post> result = postRepository.findByTitleContaining(keyword, pageRequest);
+        return result;
     }
 
 //    public Boolean postHeart(PostDto.PostHeartDto postHeartDto){

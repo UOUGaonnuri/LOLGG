@@ -13,5 +13,7 @@ public interface PostService {
     List<PostDto.PostListDto> postList(Integer page);
     Boolean postModify(PostDto.PostModifyDto postModifyDto);
     Boolean postDelete(PostDto.PostDeleteDto postDeleteDto);
+    PostDto.PostListResultDto postList2(Integer page);
+    Page<Post> postSearch(String keyword, Integer page);
 //    Boolean postHeart(PostDto.PostHeartDto postLikeDto);
 }

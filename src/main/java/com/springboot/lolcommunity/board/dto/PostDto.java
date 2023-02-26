@@ -1,11 +1,13 @@
 package com.springboot.lolcommunity.board.dto;
 
+import com.springboot.lolcommunity.board.entity.Post;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 public class PostDto {
     private PostDto(){}
@@ -81,11 +83,22 @@ public class PostDto {
         private Long pno;
     }
 
+
     @Data
     @NoArgsConstructor
     @AllArgsConstructor
     @Builder
-    public static class PostPageDto {
-        private Integer page;
+    public static class PostListResultDto {
+        private List<PostDto.PostListDto> postList;
+        private Integer end;
+    }
+
+
+    @Data
+    @NoArgsConstructor
+    @AllArgsConstructor
+    @Builder
+    public static class PostSearchDto {
+        private String keyword;
     }
 }

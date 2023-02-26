@@ -5,13 +5,9 @@ import com.springboot.lolcommunity.board.entity.Post;
 import com.springboot.lolcommunity.board.service.PostService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
-import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -58,6 +54,26 @@ public class PostController {
             return ResponseEntity.badRequest().build();
         }
     }
+    @GetMapping(value = "/page2")
+    public ResponseEntity<List<PostDto.PostListDto>> postList2(@RequestParam Integer page){
+        PostDto.PostListResultDto postListResultDto = postService.postList2(page);
+        if(postListResultDto.getEnd()==10){
+            return ResponseEntity.ok(postListResultDto.getPostList());
+        }
+        else{
+            return ResponseEntity.status(210).body(postListResultDto.getPostList());
+        }
+
+    }
+    @PostMapping(value = "/search/title")
+    public Page<Post> postTitleSearch(@RequestParam Integer page, @RequestBody PostDto.PostSearchDto postSearchDto){
+        return postService.postSearch(postSearchDto.getKeyword(), page);
+    }
+
+//    @PostMapping(value = "/search/writer")
+//    public Page<Post> postWriterSearch(@RequestParam Integer page, @RequestBody PostDto.PostSearchDto postSearchDto){
+//        return postService.postSearch(postSearchDto.getKeyword(), page);
+//    }
 //    @PostMapping(value = "/heart")
 //    public ResponseEntity<Boolean> postHeart(@RequestBody PostDto.PostHeartDto postHeartDto) {
 //        Boolean check = postService.postHeart(postHeartDto);
